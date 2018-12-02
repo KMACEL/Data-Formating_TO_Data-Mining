@@ -33,7 +33,9 @@ std::unordered_map<std::string, std::string> StringOp::parseUrlQuery(std::string
     std::unordered_map<std::string, std::string> queryParam;
     for (std::vector<std::string>::iterator it = getParsedVector.begin(); it != getParsedVector.end(); it++) {
         std::vector<std::string> getData(splitString(*it, "="));
-        queryParam.insert(make_pair(getData.at(0), getData.at(1)));
+        if (getData.size() >= 2) {
+            queryParam.insert(make_pair(getData.at(0), getData.at(1)));
+        }
     }
     return queryParam;
 }

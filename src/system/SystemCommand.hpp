@@ -46,11 +46,11 @@ public:
 
     void extractGunzip(std::string file);
 
-    void extractGunzip(std::string filePath,std::string file);
+    void extractGunzip(std::string filePath, std::string file);
 
-    void remove (std::string file);
-    void remove(std::string filePath,std::string file);
+    void remove(std::string file);
 
+    void remove(std::string filePath, std::string file);
 
 };
 

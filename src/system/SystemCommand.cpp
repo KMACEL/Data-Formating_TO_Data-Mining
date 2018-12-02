@@ -90,3 +90,4 @@ void SystemCommand::remove(std::string filePath, std::string file) {
     std::cout << "Removed... : " << file << std::endl;
     std::cout << "--------------------------------------------" << std::endl;
 }
+

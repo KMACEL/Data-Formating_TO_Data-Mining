@@ -18,7 +18,7 @@ int main() {
 
     //system("gunzip /home/mert.acel/MA/TR-Cpp/20181020.gz");
 
-    SystemCommand::getInstance()->setPath("/home/mertacel/MA/test/");
+    SystemCommand::getInstance()->setPath("/home/mertacel/MA/iTaksiPing/");
     vector<string> getFile = SystemCommand::getInstance()->getInFile();
     for (vector<string>::iterator it = getFile.begin(); it != getFile.end(); it++) {
         //SystemCommand::getInstance()->extractGunzip(*it);
@@ -35,7 +35,6 @@ int main() {
                 string splitPing = StringOp::getInstance()->splitString(line, " ").at(6);
                 if ((splitPing.at(0) == '/') && (splitPing.at(1) == '?')) {
                     cout << StringOp::getInstance()->parseUrlQuery(splitPing).at("id") << endl;
-                    //cout << splitPing << endl;
                 }
             }
             myfile.close();
