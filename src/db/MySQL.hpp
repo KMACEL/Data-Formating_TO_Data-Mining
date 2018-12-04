@@ -7,6 +7,8 @@
 
 #include <string>
 #include <mutex>
+#include <vector>
+
 
 #include <mysql_driver.h>
 #include <mysql_connection.h>
@@ -16,6 +18,9 @@
 #include <cppconn/resultset.h>
 #include <cppconn/statement.h>
 #include <cppconn/prepared_statement.h>
+
+#include "../stringOp/StringOp.hpp"
+
 
 class MySQL {
 private:

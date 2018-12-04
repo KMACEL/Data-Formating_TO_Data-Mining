@@ -5,16 +5,17 @@
 #include "system/SystemCommand.hpp"
 #include "stringOp/StringOp.hpp"
 
+
 using namespace std;
 
 
 int main() {
-    /*MySQL::getInstance()->connectDb("tcp://127.0.0.1:3306", "root", "12345678");
+
+    MySQL::getInstance()->connectDb("tcp://127.0.0.1:3306", "root", "12345678");
     MySQL::getInstance()->selectDatabase("PingInfo");
-   //MySQL::getInstance()->createTable("t1", "id INT");
-    MySQL::getInstance()->insertData("t1", "id", "5");
-    MySQL::getInstance()->insertData("t1", "id", "12");
-    MySQL::getInstance()->selectData("t1","id");*/
+    //MySQL::getInstance()->createTable("iPing", "id CHAR(20) , j INT, w INT, t DATETIME");
+    // MySQL::getInstance()->insertData("iPing", "id,j,w,t","867377021037845,17278359,24603718,2018-10-28:00:59:34");
+    // MySQL::getInstance()->selectData("pingDB","id");
 
     //system("gunzip /home/mert.acel/MA/TR-Cpp/20181020.gz");
 
@@ -34,7 +35,20 @@ int main() {
                 getline(myfile, line);
                 string splitPing = StringOp::getInstance()->splitString(line, " ").at(6);
                 if ((splitPing.at(0) == '/') && (splitPing.at(1) == '?')) {
-                    cout << StringOp::getInstance()->parseUrlQuery(splitPing).at("id") << endl;
+                    unordered_map<string, string> getParam = StringOp::getInstance()->parseUrlQuery(splitPing);
+
+                    if ((getParam.find("id") != getParam.end()) && (getParam.find("J") != getParam.end()) &&
+                        (getParam.find("W") != getParam.end()) && (getParam.find("T") != getParam.end())) {
+
+                        if ((atoi(getParam.at("J").c_str()) > 0) && atoi(getParam.at("T").c_str()) > 0) {
+                            cout << getParam.at("id")
+                                 << " - " << getParam.at("J") << " - " << getParam.at("W")
+                                 << " - " << getParam.at("T") << endl;
+                            MySQL::getInstance()->insertData("pingDB", "id,j,w,t",
+                                                             getParam.at("id") + "," + getParam.at("J") + "," +
+                                                             getParam.at("W") + "," + getParam.at("T"));
+                        }
+                    }
                 }
             }
             myfile.close();

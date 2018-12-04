@@ -4,6 +4,7 @@
 
 #include "MySQL.hpp"
 
+
 std::mutex mtxMysql;
 MySQL *MySQL::INSTANCE = 0;
 
@@ -38,7 +39,7 @@ void MySQL::selectDatabase(std::string dbName) {
 }
 
 std::string MySQL::getSelectedDatabase() {
-    con->getSchema();
+    return con->getSchema();
 }
 
 void MySQL::createTable(std::string tableName, std::string column) {
@@ -49,11 +50,33 @@ void MySQL::createTable(std::string tableName, std::string column) {
 }
 
 void MySQL::insertData(std::string tableName, std::string columnName, std::string value) {
+
+    std::cout << "--------------------------------------------" << std::endl;
+    std::cout << "Insert Data ..." << std::endl;
     sql::PreparedStatement *pstmt;
-    pstmt = con->prepareStatement("INSERT INTO " + tableName + "(" + columnName + ") VALUES (?)");
-    pstmt->setString(1, value);
+
+    unsigned int columnSize = StringOp::getInstance()->splitString(columnName, ",").size();
+    std::vector<std::string> columnValue = StringOp::getInstance()->splitString(columnName, ",");
+    std::vector<std::string> valueVector = StringOp::getInstance()->splitString(value, ",");
+
+    std::string valuesParam;
+    for (size_t i = 0; i < columnSize; i++) {
+        valuesParam += ",?";
+    }
+    valuesParam.erase(valuesParam.begin());
+
+
+    pstmt = con->prepareStatement("INSERT INTO " + tableName + "(" + columnName + ") VALUES (" + valuesParam + ")");
+
+    for (size_t i = 0; i < columnSize; i++) {
+        std::cout << columnValue.at(i) << " : " << valueVector.at(i) << std::endl;
+        pstmt->setString(i + 1, valueVector.at(i));
+    }
+
     pstmt->executeUpdate();
     delete pstmt;
+    std::cout << "--------------------------------------------" << std::endl;
+
 
     /*sql::Connection *con;
 sql::PreparedStatement  *prep_stmt
@@ -78,7 +101,7 @@ void MySQL::selectData(std::string tableName, std::string selectParam) {
     sql::PreparedStatement *pstmt;
 
     /* Select in ascending order */
-    pstmt = con->prepareStatement("SELECT id FROM " + tableName + " ORDER BY " + selectParam + " ASC");
+    pstmt = con->prepareStatement("SELECT * FROM " + tableName + " ORDER BY " + selectParam + " ASC");
     res = pstmt->executeQuery();
 
     /* Fetch in reverse = descending order! */
